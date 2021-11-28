@@ -94,12 +94,13 @@ public class Cube : MonoBehaviour
     {
         List<Material> materialsList = new List<Material>();
 
-        Material redMaterial = new Material(Shader.Find("Specular"));
-        redMaterial.color = Color.red;
+        Material blueMaterial = new Material(Shader.Find("Specular"));
+        blackMaterial.color = Color.blue;
 
         Material greenMaterial = new Material(Shader.Find("Specular"));
         greenMaterial.color = Color.green;
 
+        /*
         Material blueMaterial = new Material(Shader.Find("Specular"));
         blueMaterial.color = Color.blue;
 
@@ -111,14 +112,19 @@ public class Cube : MonoBehaviour
 
         Material cyanMaterial = new Material(Shader.Find("Specular"));
         cyanMaterial.color = Color.cyan;
-
-        materialsList.Add(redMaterial);
+        */
+        materialsList.Add(blueMaterial);
         materialsList.Add(greenMaterial);
+        materialsList.Add(greenMaterial);
+        materialsList.Add(greenMaterial);
+        materialsList.Add(greenMaterial);
+        materialsList.Add(greenMaterial);
+        /*
         materialsList.Add(blueMaterial);
         materialsList.Add(yellowMaterial);
         materialsList.Add(magentaMaterial);
         materialsList.Add(cyanMaterial);
-
+        */
         return materialsList;
     }
 }
