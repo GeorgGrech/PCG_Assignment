@@ -95,7 +95,7 @@ public class Cube : MonoBehaviour
         List<Material> materialsList = new List<Material>();
 
         Material blueMaterial = new Material(Shader.Find("Specular"));
-        blackMaterial.color = Color.blue;
+        blueMaterial.color = Color.blue;
 
         Material greenMaterial = new Material(Shader.Find("Specular"));
         greenMaterial.color = Color.green;

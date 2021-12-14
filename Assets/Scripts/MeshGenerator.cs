@@ -73,7 +73,7 @@ public class MeshGenerator : MonoBehaviour
         {
             if (submeshList[i].Count < 3)
             {
-                mesh.SetTriangles(new int[3] { 0, 0, 0 },1);
+                mesh.SetTriangles(new int[3] { 0, 0, 0 },i);
             }
             else
             {
