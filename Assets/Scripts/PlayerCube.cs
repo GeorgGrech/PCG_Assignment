@@ -6,7 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(MeshCollider))]
 
-public class Cube : MonoBehaviour
+public class PlayerCube : MonoBehaviour
 {
     [SerializeField]
     private Vector3 cubeSize = Vector3.one;
@@ -99,37 +99,16 @@ public class Cube : MonoBehaviour
     {
         List<Material> materialsList = new List<Material>();
 
-        Material blueMaterial = new Material(Shader.Find("Specular"));
-        blueMaterial.color = Color.blue;
-
-        Material greenMaterial = new Material(Shader.Find("Specular"));
-        greenMaterial.color = Color.green;
-
-        /*
-        Material blueMaterial = new Material(Shader.Find("Specular"));
-        blueMaterial.color = Color.blue;
-
         Material yellowMaterial = new Material(Shader.Find("Specular"));
         yellowMaterial.color = Color.yellow;
-
-        Material magentaMaterial = new Material(Shader.Find("Specular"));
-        magentaMaterial.color = Color.magenta;
-
-        Material cyanMaterial = new Material(Shader.Find("Specular"));
-        cyanMaterial.color = Color.cyan;
-        */
-        materialsList.Add(blueMaterial);
-        materialsList.Add(greenMaterial);
-        materialsList.Add(greenMaterial);
-        materialsList.Add(greenMaterial);
-        materialsList.Add(greenMaterial);
-        materialsList.Add(greenMaterial);
-        /*
-        materialsList.Add(blueMaterial);
+        
         materialsList.Add(yellowMaterial);
-        materialsList.Add(magentaMaterial);
-        materialsList.Add(cyanMaterial);
-        */
+        materialsList.Add(yellowMaterial);
+        materialsList.Add(yellowMaterial);
+        materialsList.Add(yellowMaterial);
+        materialsList.Add(yellowMaterial);
+        materialsList.Add(yellowMaterial);
+
         return materialsList;
     }
 }
