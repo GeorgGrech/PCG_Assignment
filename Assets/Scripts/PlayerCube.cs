@@ -10,7 +10,7 @@ using UnityEngine;
 public class PlayerCube : MonoBehaviour
 {
     MeshCollider meshCollider;
-    //Rigidbody rigidbody;
+    Rigidbody rigidbody;
     Collision collision;
 
     [SerializeField]
@@ -25,6 +25,7 @@ public class PlayerCube : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        rigidbody = this.GetComponent<Rigidbody>();
         RenderCube();
         SpawnRandom();
     }
@@ -126,8 +127,8 @@ public class PlayerCube : MonoBehaviour
         Debug.Log(spawnPoint);
 
         
-        this.GetComponent<Rigidbody>().useGravity = false;
-        this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezePositionY;
+        rigidbody.useGravity = false;
+        rigidbody.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
     }
 
     private void OnCollisionStay(Collision collision)
@@ -137,8 +138,8 @@ public class PlayerCube : MonoBehaviour
     }
     private void OnCollisionExit(Collision collision)
     {
-        this.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
-        this.GetComponent<Rigidbody>().angularVelocity = new Vector3(0, 0, 0);
+        rigidbody.velocity = new Vector3(0, 0, 0);
+        rigidbody.angularVelocity = new Vector3(0, 0, 0);
     }
 
     private void MovementInput()
