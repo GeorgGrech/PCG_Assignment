@@ -5,9 +5,14 @@ using UnityEngine;
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(MeshCollider))]
+[RequireComponent(typeof(Rigidbody))]
 
 public class PlayerCube : MonoBehaviour
 {
+    MeshCollider meshCollider;
+    //Rigidbody rigidbody;
+    Collision collision;
+
     [SerializeField]
     private Vector3 cubeSize = Vector3.one;
 
@@ -21,12 +26,13 @@ public class PlayerCube : MonoBehaviour
     void Start()
     {
         RenderCube();
+        SpawnRandom();
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 
     public Vector3 CubeSize
@@ -40,12 +46,14 @@ public class PlayerCube : MonoBehaviour
 
         MeshFilter meshFilter = this.GetComponent<MeshFilter>();
         MeshRenderer meshRenderer = this.GetComponent<MeshRenderer>();
-        MeshCollider meshCollider = this.GetComponent<MeshCollider>();
+        meshCollider = this.GetComponent<MeshCollider>();
 
         meshFilter.mesh = CreateCube();
         meshRenderer.materials = MaterialsList().ToArray();
         meshCollider.sharedMesh = meshFilter.mesh;
         meshCollider.convex = true;
+
+        this.GetComponent<Rigidbody>().useGravity = false;
     }
 
     private Mesh CreateCube()
@@ -110,5 +118,21 @@ public class PlayerCube : MonoBehaviour
         materialsList.Add(yellowMaterial);
 
         return materialsList;
+    }
+
+    private void SpawnRandom()
+    {
+        transform.position = new Vector3(Random.Range(-28, 28), -1, Random.Range(-28, 28));
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        Debug.Log("Collision detected");
+        this.collision = collision;
+    }
+
+    private void MovementInput()
+    {
+
     }
 }
