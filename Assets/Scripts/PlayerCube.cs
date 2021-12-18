@@ -141,13 +141,4 @@ public class PlayerCube : MonoBehaviour
         rigidbody.velocity = new Vector3(0, 0, 0);
         rigidbody.angularVelocity = new Vector3(0, 0, 0);
     }
-
-    private void MovementInput()
-    {
-
-    }
-    void RotationInput()
-    {
-        
-    }
 }
