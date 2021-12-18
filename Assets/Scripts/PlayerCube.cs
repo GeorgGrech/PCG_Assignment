@@ -32,7 +32,7 @@ public class PlayerCube : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public Vector3 CubeSize
@@ -53,7 +53,6 @@ public class PlayerCube : MonoBehaviour
         meshCollider.sharedMesh = meshFilter.mesh;
         meshCollider.convex = true;
 
-        this.GetComponent<Rigidbody>().useGravity = false;
     }
 
     private Mesh CreateCube()
@@ -122,7 +121,13 @@ public class PlayerCube : MonoBehaviour
 
     private void SpawnRandom()
     {
-        transform.position = new Vector3(Random.Range(-28, 28), -1, Random.Range(-28, 28));
+        Vector3 spawnPoint = new Vector3(Random.Range(-28, 28), -1, Random.Range(-28, 28));
+        transform.position = spawnPoint;
+        Debug.Log(spawnPoint);
+
+        
+        this.GetComponent<Rigidbody>().useGravity = false;
+        this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezePositionY;
     }
 
     private void OnCollisionStay(Collision collision)
@@ -130,9 +135,18 @@ public class PlayerCube : MonoBehaviour
         Debug.Log("Collision detected");
         this.collision = collision;
     }
+    private void OnCollisionExit(Collision collision)
+    {
+        this.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
+        this.GetComponent<Rigidbody>().angularVelocity = new Vector3(0, 0, 0);
+    }
 
     private void MovementInput()
     {
 
+    }
+    void RotationInput()
+    {
+        
     }
 }
