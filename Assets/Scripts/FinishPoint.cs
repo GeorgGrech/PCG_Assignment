@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(MeshFilter))]
@@ -10,7 +10,7 @@ using UnityEngine;
 public class FinishPoint : MonoBehaviour
 {
     Rigidbody rigidbody;
-
+    MeshCollider meshCollider;
     [SerializeField]
     private int subMeshSize = 5;
 
@@ -35,9 +35,12 @@ public class FinishPoint : MonoBehaviour
     {
         MeshFilter meshFilter = GetComponent<MeshFilter>();
         MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
+        meshCollider = this.GetComponent<MeshCollider>();
 
         meshFilter.mesh = CreatePyramid();
         meshRenderer.materials = MaterialsList().ToArray();
+        meshCollider.sharedMesh = meshFilter.mesh;
+        meshCollider.convex = true;
     }
 
     private Mesh CreatePyramid()
@@ -90,5 +93,16 @@ public class FinishPoint : MonoBehaviour
     {
         rigidbody.velocity = new Vector3(0, 0, 0);
         rigidbody.angularVelocity = new Vector3(0, 0, 0);
+    }
+
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("Collision");
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Debug.Log("Player collision");
+            SceneManager.LoadScene("Task2-Terrain");
+        }
     }
 }
