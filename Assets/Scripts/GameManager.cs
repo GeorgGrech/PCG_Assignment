@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,10 +18,17 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(passedCheckpoints == 2 && trackNum!=3)
+        if(passedCheckpoints >= 2)
         {
-            DestroyTrack();
-            GenerateTrack();
+            if(trackNum != 3) //if not final track
+            {
+                DestroyTrack();
+                GenerateTrack();
+            }
+            else //if finished final track
+            {
+                SceneManager.LoadScene("EndScene");
+            }
         }
     }
 

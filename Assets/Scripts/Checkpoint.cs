@@ -13,10 +13,9 @@ public class Checkpoint : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.tag);
-        if (other.CompareTag("Player"))        {
+        if (other.CompareTag("Player")){
             GameManager.GetComponent<GameManager>().passedCheckpoints++;
-            Debug.Log(GameManager.GetComponent<GameManager>().passedCheckpoints);
+            Debug.Log("Checkpoint "+GameManager.GetComponent<GameManager>().passedCheckpoints);
             Destroy(gameObject);
         }
     }
