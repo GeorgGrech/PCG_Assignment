@@ -111,15 +111,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   submeshCount: 3
-  radius: 120
+  radius: 100
   roadMarkerWidth: 0.2
   roadWidth: 10
   barrierWidth: 0.6
   quadCount: 300
   minVariance: 300
-  maxVariance: 500
+  maxVariance: 400
   minVarianceScale: 3
-  maxVarianceScale: 6
+  maxVarianceScale: 5
   varianceOffset: {x: 5.6, y: 4.5}
   varianceStep: {x: 0.01, y: 0.01}
   checkpoint: {fileID: 8212468473949308291, guid: 0e52d9b2e7fa7ef45995a3b52b5845c6, type: 3}
+  finishStartGap: 4

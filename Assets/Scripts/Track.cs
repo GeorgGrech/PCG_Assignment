@@ -44,7 +44,9 @@ public class Track : MonoBehaviour
 
     private MeshGenerator meshGenerator;
 
-    [SerializeField] private GameObject checkpoint;
+    [SerializeField] private GameObject checkpoint; //Checkpoints throughout level
+    [SerializeField] private int finishStartGap = 4; //Gap between Start and finish to prevent end checkpoint hit
+
     private GameObject car;
 
     // Start is called before the first frame update
@@ -121,13 +123,13 @@ public class Track : MonoBehaviour
         car.transform.position = pointRefList[startPosition];
         car.transform.LookAt(pointRefList[startPosition+1]);
         
-        GameObject checkpoint1 = Instantiate(checkpoint,gameObject.transform);
-        checkpoint.transform.position = pointRefList[(pointRefList.Count)-1]; //Checkpoint at the end
-        checkpoint.transform.LookAt(pointRefList[startPosition]);
+        GameObject endCheckpoint = Instantiate(checkpoint,gameObject.transform);
+        endCheckpoint.transform.position = pointRefList[(pointRefList.Count)-finishStartGap]; //Checkpoint at the end
+        endCheckpoint.transform.LookAt(pointRefList[startPosition]);
 
-        GameObject checkpoint2 = Instantiate(checkpoint, gameObject.transform);
-        checkpoint2.transform.position = pointRefList[pointRefList.Count/2]; //Checkpoint at the midway point
-        checkpoint2.transform.LookAt(pointRefList[(pointRefList.Count / 2)+1]);
+        GameObject middleCheckpoint = Instantiate(checkpoint, gameObject.transform);
+        middleCheckpoint.transform.position = pointRefList[pointRefList.Count/2]; //Checkpoint at the midway point
+        middleCheckpoint.transform.LookAt(pointRefList[(pointRefList.Count / 2)+1]);
         
         return meshGenerator.CreateMesh();
     }
@@ -148,7 +150,7 @@ public class Track : MonoBehaviour
         //create the barrier
         offset += targetOffset;
         targetOffset = Vector3.forward * barrierWidth;
-        Vector3 barrierOffset = new Vector3(targetOffset.x, targetOffset.y + 1, targetOffset.z); //Raise barrier to create wall
+        Vector3 barrierOffset = new Vector3(targetOffset.x, targetOffset.y + 2, targetOffset.z); //Raise barrier to create wall
         CreateQuad(prevQuad, currQuad, nextQuad, 2, offset, barrierOffset);
 
     }

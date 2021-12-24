@@ -13,10 +13,8 @@ public class Checkpoint : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Collision");
-        if (other.gameObject.CompareTag("Player"));
-        {
-            Debug.Log("Car Collision");
+        Debug.Log(other.tag);
+        if (other.CompareTag("Player"))        {
             GameManager.GetComponent<GameManager>().passedCheckpoints++;
             Debug.Log(GameManager.GetComponent<GameManager>().passedCheckpoints);
             Destroy(gameObject);
