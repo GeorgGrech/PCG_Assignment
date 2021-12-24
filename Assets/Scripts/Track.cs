@@ -44,12 +44,14 @@ public class Track : MonoBehaviour
 
     private MeshGenerator meshGenerator;
 
-    [SerializeField]
+    [SerializeField] private GameObject checkpoint;
     private GameObject car;
 
     // Start is called before the first frame update
     void Start()
     {
+
+        car = GameObject.Find("Car");
         RenderTrack();
     }
 
@@ -117,7 +119,15 @@ public class Track : MonoBehaviour
         }
         int startPosition = 0;
         car.transform.position = pointRefList[startPosition];
-        car.transform.LookAt(pointRefList[startPosition++]);
+        car.transform.LookAt(pointRefList[startPosition+1]);
+        
+        GameObject checkpoint1 = Instantiate(checkpoint,gameObject.transform);
+        checkpoint.transform.position = pointRefList[(pointRefList.Count)-1]; //Checkpoint at the end
+        checkpoint.transform.LookAt(pointRefList[startPosition]);
+
+        GameObject checkpoint2 = Instantiate(checkpoint, gameObject.transform);
+        checkpoint2.transform.position = pointRefList[pointRefList.Count/2]; //Checkpoint at the midway point
+        checkpoint2.transform.LookAt(pointRefList[(pointRefList.Count / 2)+1]);
         
         return meshGenerator.CreateMesh();
     }
