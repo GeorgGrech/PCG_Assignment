@@ -24,6 +24,9 @@ public class Track : MonoBehaviour
     private float barrierWidth = 0.6f;
 
     [SerializeField]
+    private float barrierHeight = 2;
+
+    [SerializeField]
     private int quadCount = 300;
 
     [SerializeField]
@@ -150,7 +153,13 @@ public class Track : MonoBehaviour
         //create the barrier
         offset += targetOffset;
         targetOffset = Vector3.forward * barrierWidth;
-        Vector3 barrierOffset = new Vector3(targetOffset.x, targetOffset.y + 2, targetOffset.z); //Raise barrier to create wall
+        Vector3 barrierOffset = new Vector3(targetOffset.x, targetOffset.y + barrierHeight, targetOffset.z); //Raise barrier to create wall
+        CreateQuad(prevQuad, currQuad, nextQuad, 2, offset, barrierOffset);
+
+        //Create other side of barrier
+        offset += barrierOffset;
+        targetOffset = Vector3.forward * barrierWidth;
+        barrierOffset = new Vector3(targetOffset.x, targetOffset.y -barrierHeight, targetOffset.z); //Lower other side of barrier
         CreateQuad(prevQuad, currQuad, nextQuad, 2, offset, barrierOffset);
 
     }
