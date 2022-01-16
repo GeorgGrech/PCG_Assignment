@@ -123,16 +123,24 @@ public class Track : MonoBehaviour
             CreateTrack(prevQuad, currQuad, nextQuad);
         }
         int startPosition = 0;
-        car.transform.position = pointRefList[startPosition];
-        car.transform.LookAt(pointRefList[startPosition+1]);
-        
-        GameObject endCheckpoint = Instantiate(checkpoint,gameObject.transform);
-        endCheckpoint.transform.position = pointRefList[(pointRefList.Count)-finishStartGap]; //Checkpoint at the end
-        endCheckpoint.transform.LookAt(pointRefList[startPosition]);
+        //car.transform.position = pointRefList[startPosition];
+        int spawnPosition = Random.Range(finishStartGap, pointRefList.Count); //Position further ahead of 0 to avoid negative checkpoint spawn value
+        car.transform.position = pointRefList[spawnPosition];
+        car.transform.LookAt(pointRefList[spawnPosition+1]);
 
+        car.GetComponent<Rigidbody>().velocity = Vector3.zero; //Stop unpredictable car movement on level change to avoid accidental checkpoint triggering
+
+        GameObject endCheckpoint = Instantiate(checkpoint,gameObject.transform);
+        int endCheckpointPosition = spawnPosition - finishStartGap;
+        endCheckpoint.transform.position = pointRefList[endCheckpointPosition]; //Checkpoint at the end
+        endCheckpoint.transform.LookAt(pointRefList[spawnPosition]);
+
+        int trackMiddlePoint = pointRefList.Count / 2;
+        int middleCheckpointPosition = (endCheckpointPosition + trackMiddlePoint); //Set to spawn on other side
+        if (middleCheckpointPosition >= pointRefList.Count) middleCheckpointPosition = endCheckpointPosition - trackMiddlePoint;  //Account for possible overflow
         GameObject middleCheckpoint = Instantiate(checkpoint, gameObject.transform);
-        middleCheckpoint.transform.position = pointRefList[pointRefList.Count/2]; //Checkpoint at the midway point
-        middleCheckpoint.transform.LookAt(pointRefList[(pointRefList.Count / 2)+1]);
+        middleCheckpoint.transform.position = pointRefList[middleCheckpointPosition]; //Checkpoint at a midway point, can be left static
+        middleCheckpoint.transform.LookAt(pointRefList[middleCheckpointPosition+1]);
         
         return meshGenerator.CreateMesh();
     }
