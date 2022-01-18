@@ -155,20 +155,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minRandomHeightRange: 0
-  maxRandomHeightRange: 0.1
+  maxRandomHeightRange: 0.005
   flatternTerrain: 1
-  perlinNoise: 0
-  perlinNoiseWidthScale: 0.01
-  perlinNoiseHeightScale: 0.01
+  perlinNoise: 1
+  minPerlinNoiseWidthScale: 0.005
+  maxPerlinNoiseWidthScale: 0.015
+  minPerlinNoiseHeightScale: 0.005
+  maxPerlinNoiseHeightScale: 0.015
   terrainTextureData: []
   addTerrainTexture: 0
   terrainTextureBlendOffset: 0.01
-  treeData: []
+  treeData:
+  - treeMesh: {fileID: 100016, guid: 469edab27ab6d004d84af2c4a851bd7f, type: 3}
+    minHeight: 0.2
+    maxHeight: 0.5
   maxTrees: 1000
   treeSpacing: 20
-  addTrees: 0
+  addTrees: 1
   terrainLayerIndex: 0
-  water: {fileID: 0}
+  water: {fileID: 100006, guid: b544816461f324e56a39767fdeb5b114, type: 3}
   waterHeight: 0.3
 --- !u!154 &1527863257
 TerrainCollider:

@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -41,11 +40,12 @@ public class GenerateRandomHeights : MonoBehaviour
     [SerializeField]
     private bool perlinNoise = false;
 
-    [SerializeField]
-    private float perlinNoiseWidthScale = 0.01f;
+    //To randomly select perlin noise scale between min and max
+    [SerializeField] private float minPerlinNoiseWidthScale = 0.002f;
+    [SerializeField] private float maxPerlinNoiseWidthScale = 0.02f;
 
-    [SerializeField]
-    private float perlinNoiseHeightScale = 0.01f;
+    [SerializeField] private float minPerlinNoiseHeightScale = 0.002f;
+    [SerializeField] private float maxPerlinNoiseHeightScale = 0.02f;
 
     [Header("Texture Data")]
     [SerializeField]
@@ -101,8 +101,11 @@ public class GenerateRandomHeights : MonoBehaviour
     private void GenerateHeights()
     {
 
-       // var perlinNoiseWidthScale = UnityEngine.Random.Range(0.00f, 0.02f);
-       // var perlinNoiseHeightScale = UnityEngine.Random.Range(0.00f, 0.02f);
+        // var perlinNoiseWidthScale = UnityEngine.Random.Range(0.00f, 0.02f);
+        // var perlinNoiseHeightScale = UnityEngine.Random.Range(0.00f, 0.02f);
+
+        float perlinWidth = Random.Range(minPerlinNoiseWidthScale, maxPerlinNoiseWidthScale);
+        float perlinHeight = Random.Range(minPerlinNoiseHeightScale, maxPerlinNoiseHeightScale);
 
         float[,] heightMap = new float[terrainData.heightmapResolution, terrainData.heightmapResolution];
 
@@ -113,16 +116,17 @@ public class GenerateRandomHeights : MonoBehaviour
                 
                 if (perlinNoise)
                 {
-                    heightMap[width, height] = Mathf.PerlinNoise(width * perlinNoiseWidthScale, height * perlinNoiseHeightScale);
+
+                    heightMap[width, height] = Mathf.PerlinNoise(width * perlinWidth, height * perlinHeight);
                 }
                 else
                 {
-                    heightMap[width, height] = UnityEngine.Random.Range(minRandomHeightRange, maxRandomHeightRange);
+                    heightMap[width, height] = Random.Range(minRandomHeightRange, maxRandomHeightRange);
                 }
                 
 
-                heightMap[width, height] = UnityEngine.Random.Range(minRandomHeightRange, maxRandomHeightRange);
-                heightMap[width, height] += Mathf.PerlinNoise(width * perlinNoiseWidthScale, height * perlinNoiseHeightScale);
+                heightMap[width, height] = Random.Range(minRandomHeightRange, maxRandomHeightRange);
+                heightMap[width, height] += Mathf.PerlinNoise(width * perlinWidth, height * perlinHeight);
             }
         }
         terrainData.SetHeights(0, 0, heightMap);
@@ -239,8 +243,8 @@ public class GenerateRandomHeights : MonoBehaviour
 
                             if (currentHeight >= treeData[treeIndex].minHeight && currentHeight <= treeData[treeIndex].maxHeight)
                             {
-                                float randomX = (x + UnityEngine.Random.Range(-5.0f, 5.0f)) / terrainData.size.x;
-                                float randomZ = (z + UnityEngine.Random.Range(-5.0f, 5.0f)) / terrainData.size.z;
+                                float randomX = (x + Random.Range(-5.0f, 5.0f)) / terrainData.size.x;
+                                float randomZ = (z + Random.Range(-5.0f, 5.0f)) / terrainData.size.z;
 
                                 Vector3 treePosition = new Vector3(randomX * terrainData.size.x,
                                                                    currentHeight * terrainData.size.y,
