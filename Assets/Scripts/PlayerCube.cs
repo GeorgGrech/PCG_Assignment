@@ -4,12 +4,12 @@ using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
-[RequireComponent(typeof(MeshCollider))]
+//[RequireComponent(typeof(MeshCollider))]
 [RequireComponent(typeof(Rigidbody))]
 
 public class PlayerCube : MonoBehaviour
 {
-    MeshCollider meshCollider;
+    //MeshCollider meshCollider;
     Rigidbody rigidbody;
     Collision collision;
 
@@ -47,12 +47,12 @@ public class PlayerCube : MonoBehaviour
 
         MeshFilter meshFilter = this.GetComponent<MeshFilter>();
         MeshRenderer meshRenderer = this.GetComponent<MeshRenderer>();
-        meshCollider = this.GetComponent<MeshCollider>();
+        //meshCollider = this.GetComponent<MeshCollider>();
 
         meshFilter.mesh = CreateCube();
         meshRenderer.materials = MaterialsList().ToArray();
-        meshCollider.sharedMesh = meshFilter.mesh;
-        meshCollider.convex = true;
+        //meshCollider.sharedMesh = meshFilter.mesh;
+        //meshCollider.convex = true;
 
     }
 
@@ -127,8 +127,8 @@ public class PlayerCube : MonoBehaviour
         Debug.Log(spawnPoint);
 
         
-        rigidbody.useGravity = false;
-        rigidbody.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+        //rigidbody.useGravity = false;
+        rigidbody.constraints = /*RigidbodyConstraints.FreezePositionY|*/  RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
     }
 
     private void OnCollisionStay(Collision collision)
