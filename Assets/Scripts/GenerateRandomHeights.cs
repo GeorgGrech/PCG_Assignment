@@ -19,6 +19,15 @@ public class TreeData
     public float maxHeight;
 }
 
+
+[System.Serializable]
+public class Player
+{
+    public GameObject playerPrefab;
+    public float minHeight;
+    public float maxHeight;
+}
+
 public class GenerateRandomHeights : MonoBehaviour
 {
     private Terrain terrain;
@@ -79,6 +88,12 @@ public class GenerateRandomHeights : MonoBehaviour
 
     [SerializeField]
     private float waterHeight = 0.3f;
+
+
+    [Header("Player")]
+    [SerializeField]
+    private Player player;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -96,6 +111,7 @@ public class GenerateRandomHeights : MonoBehaviour
         AddTerrainTextures();
         AddTrees();
         AddWater();
+        SpawnPlayer();
     }
 
     private void GenerateHeights()
@@ -286,6 +302,64 @@ public class GenerateRandomHeights : MonoBehaviour
         waterGameObject.name = "Water";
         waterGameObject.transform.position = this.transform.position + new Vector3(terrainData.size.x / 2, waterHeight * terrainData.size.y, terrainData.size.z / 2);
         waterGameObject.transform.localScale = new Vector3(terrainData.size.x, 1, terrainData.size.z);
+    }
+
+    private void SpawnPlayer()
+    {
+
+        bool playerSpawned = false;
+
+        while (!playerSpawned)
+        {
+
+            int randomXPos = 0;
+            int randomZPos = 0;
+            float heightFound = 0;
+            bool positionAvailable = false;
+
+            while (!positionAvailable)
+            {
+                randomXPos = Random.Range(0, (int)terrainData.size.x);
+                randomZPos = Random.Range(0, (int)terrainData.size.z);
+
+                heightFound = terrainData.GetHeight(randomXPos, randomZPos) / terrainData.size.y;
+                if (heightFound >= player.minHeight && heightFound <= player.maxHeight)
+                {
+                    positionAvailable = true;
+                    Debug.Log("Height selected: " + heightFound);
+                }
+            }
+
+
+            //float playerX = randomXPos / terrainData.size.x;
+            //float playerZ = randomZPos / terrainData.size.z;
+
+            Vector3 playerPosition = new Vector3(randomXPos,
+                                                heightFound * terrainData.size.y,
+                                                randomZPos) + this.transform.position;
+            Debug.Log("Player spawn position: "+playerPosition);
+            Debug.Log("Terrain height " + terrainData.size.y);
+            //RaycastHit raycastHit;
+
+            Instantiate(player.playerPrefab, playerPosition, this.transform.rotation);
+            playerSpawned = true;
+            //Debug.Log("Player X Pos: " + playerX + " Player Y Pos: " + playerDistance + " Player Z Pos: " + playerZ);
+
+
+            //int layerMask = 1 << terrainLayerIndex;
+
+            /*
+            if (Physics.Raycast(playerPosition, -Vector3.up, out raycastHit, 100, layerMask) ||
+                Physics.Raycast(playerPosition, Vector3.up, out raycastHit, 100, layerMask))
+            {
+                float playerDistance = (raycastHit.point.y - this.transform.position.y) / terrainData.size.y;
+
+                Instantiate(player.playerPrefab, new Vector3(playerX, playerDistance, playerZ), this.transform.rotation);
+                Debug.Log("Player X Pos: " + playerX + " Player Y Pos: " + playerDistance+ " Player Z Pos: " + playerZ);
+
+                playerSpawned = true;
+            }*/
+        }
     }
 
 

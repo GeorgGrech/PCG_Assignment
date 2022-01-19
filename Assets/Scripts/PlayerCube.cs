@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
@@ -27,7 +28,11 @@ public class PlayerCube : MonoBehaviour
     {
         rigidbody = this.GetComponent<Rigidbody>();
         RenderCube();
-        SpawnRandom();
+        rigidbody.constraints = /*RigidbodyConstraints.FreezePositionY|*/  RigidbodyConstraints.FreezeRotation;
+        if (SceneManager.GetActiveScene().name.Contains("Task1")) //Enable only on Level 1 
+        {
+            SpawnRandom();
+        }
     }
 
     // Update is called once per frame
@@ -128,7 +133,7 @@ public class PlayerCube : MonoBehaviour
 
         
         //rigidbody.useGravity = false;
-        rigidbody.constraints = /*RigidbodyConstraints.FreezePositionY|*/  RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+        
     }
 
     private void OnCollisionStay(Collision collision)

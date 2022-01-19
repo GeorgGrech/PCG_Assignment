@@ -166,14 +166,14 @@ MonoBehaviour:
   - terrainTexture: {fileID: 2800000, guid: 6bcc65b7c6e3a0b448d7801bfc56842f, type: 3}
     tileSize: {x: 15, y: 15}
     minHeight: 0
-    maxHeight: 0.2
+    maxHeight: 0.35
   - terrainTexture: {fileID: 2800000, guid: 7f3df385222f5b1428f6a156037deb5e, type: 3}
     tileSize: {x: 20, y: 20}
-    minHeight: 0.2
-    maxHeight: 0.35
+    minHeight: 0.35
+    maxHeight: 0.5
   - terrainTexture: {fileID: 2800000, guid: 43b54d39e0a4c4d47bef645abec127f1, type: 3}
     tileSize: {x: 100, y: 100}
-    minHeight: 0.35
+    minHeight: 0.5
     maxHeight: 0.6
   - terrainTexture: {fileID: 2800000, guid: fcd3993703e7d804bb735613d2a5189d, type: 3}
     tileSize: {x: 15, y: 15}
@@ -187,17 +187,21 @@ MonoBehaviour:
   terrainTextureBlendOffset: 0.1
   treeData:
   - treeMesh: {fileID: 100016, guid: 469edab27ab6d004d84af2c4a851bd7f, type: 3}
-    minHeight: 0.2
-    maxHeight: 0.5
+    minHeight: 0.4
+    maxHeight: 0.7
   - treeMesh: {fileID: 100000, guid: c91c1eb85782d5748ace27eb4d7415bb, type: 3}
-    minHeight: 0.2
-    maxHeight: 0.5
+    minHeight: 0.5
+    maxHeight: 0.7
   maxTrees: 10000
   treeSpacing: 20
   addTrees: 1
   terrainLayerIndex: 8
   water: {fileID: 100006, guid: b544816461f324e56a39767fdeb5b114, type: 3}
-  waterHeight: 0.4
+  waterHeight: 0.35
+  player:
+    playerPrefab: {fileID: 3279715178995888508, guid: fb98b4d2b2f88b848ac5e6fdc71a5edc, type: 3}
+    minHeight: 0.35
+    maxHeight: 1
 --- !u!154 &1527863257
 TerrainCollider:
   m_ObjectHideFlags: 0
@@ -255,7 +259,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2133296743
 GameObject:
@@ -350,60 +354,3 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!1001 &6037386102282569986
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 3279715178995888455, guid: fb98b4d2b2f88b848ac5e6fdc71a5edc, type: 3}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3279715178995888455, guid: fb98b4d2b2f88b848ac5e6fdc71a5edc, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 500
-      objectReference: {fileID: 0}
-    - target: {fileID: 3279715178995888455, guid: fb98b4d2b2f88b848ac5e6fdc71a5edc, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 500
-      objectReference: {fileID: 0}
-    - target: {fileID: 3279715178995888455, guid: fb98b4d2b2f88b848ac5e6fdc71a5edc, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 500
-      objectReference: {fileID: 0}
-    - target: {fileID: 3279715178995888455, guid: fb98b4d2b2f88b848ac5e6fdc71a5edc, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3279715178995888455, guid: fb98b4d2b2f88b848ac5e6fdc71a5edc, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3279715178995888455, guid: fb98b4d2b2f88b848ac5e6fdc71a5edc, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3279715178995888455, guid: fb98b4d2b2f88b848ac5e6fdc71a5edc, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3279715178995888455, guid: fb98b4d2b2f88b848ac5e6fdc71a5edc, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3279715178995888455, guid: fb98b4d2b2f88b848ac5e6fdc71a5edc, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3279715178995888455, guid: fb98b4d2b2f88b848ac5e6fdc71a5edc, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3279715178995888508, guid: fb98b4d2b2f88b848ac5e6fdc71a5edc, type: 3}
-      propertyPath: m_Name
-      value: Player
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: fb98b4d2b2f88b848ac5e6fdc71a5edc, type: 3}
