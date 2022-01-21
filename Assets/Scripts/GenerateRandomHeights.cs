@@ -85,10 +85,18 @@ public class GenerateRandomHeights : MonoBehaviour
     [Header("Water")]
     [SerializeField]
     private GameObject water;
-
     [SerializeField]
     private float waterHeight = 0.3f;
 
+    [Header("Clouds")]
+    [SerializeField]
+    private GameObject clouds;
+    [SerializeField]
+    private float cloudHeight = 0.9f;
+    [SerializeField]
+    private int cloudAmount = 20;
+    [SerializeField]
+    private bool addClouds = false;
 
     [Header("Player")]
     [SerializeField]
@@ -111,6 +119,7 @@ public class GenerateRandomHeights : MonoBehaviour
         AddTerrainTextures();
         AddTrees();
         AddWater();
+        AddClouds();
         SpawnPlayer();
     }
 
@@ -255,7 +264,9 @@ public class GenerateRandomHeights : MonoBehaviour
                     {
                         if (treeInstanceList.Count < maxTrees)
                         {
-                            float currentHeight = terrainData.GetHeight(x, z) / terrainData.size.y; //give us a height value between 0 & 1
+                            Vector3 spawnPos = new Vector3(x, terrainData.size.y, z);
+
+                            float currentHeight = Terrain.activeTerrain.SampleHeight(spawnPos) / terrainData.size.y; //give us a height value between 0 & 1
 
                             if (currentHeight >= treeData[treeIndex].minHeight && currentHeight <= treeData[treeIndex].maxHeight)
                             {
@@ -345,22 +356,20 @@ public class GenerateRandomHeights : MonoBehaviour
 
             Instantiate(player.playerPrefab, playerPosition, this.transform.rotation);
             playerSpawned = true;
-            //Debug.Log("Player X Pos: " + playerX + " Player Y Pos: " + playerDistance + " Player Z Pos: " + playerZ);
+        }
+    }
 
-
-            //int layerMask = 1 << terrainLayerIndex;
-
-            /*
-            if (Physics.Raycast(playerPosition, -Vector3.up, out raycastHit, 100, layerMask) ||
-                Physics.Raycast(playerPosition, Vector3.up, out raycastHit, 100, layerMask))
+    public void AddClouds()
+    {
+        if (addClouds)
+        {
+            for (int x = 0; x < cloudAmount; x++)
             {
-                float playerDistance = (raycastHit.point.y - this.transform.position.y) / terrainData.size.y;
-
-                Instantiate(player.playerPrefab, new Vector3(playerX, playerDistance, playerZ), this.transform.rotation);
-                Debug.Log("Player X Pos: " + playerX + " Player Y Pos: " + playerDistance+ " Player Z Pos: " + playerZ);
-
-                playerSpawned = true;
-            }*/
+                float randomXPos = Random.Range(0, (int)terrainData.size.x);
+                float randomZPos = Random.Range(0, (int)terrainData.size.z);
+                Vector3 spawnPos = new Vector3(randomXPos, cloudHeight * terrainData.size.y, randomZPos) + this.transform.position;
+                Instantiate(clouds, spawnPos, Quaternion.identity);
+            }
         }
     }
 
