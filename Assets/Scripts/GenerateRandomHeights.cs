@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,6 +25,7 @@ public class Player
     public GameObject playerPrefab;
     public float minHeight;
     public float maxHeight;
+    public float spawnOffset; //Vertical offset to avoid clipping terrain when spawning
 }
 
 public class GenerateRandomHeights : MonoBehaviour
@@ -46,8 +46,8 @@ public class GenerateRandomHeights : MonoBehaviour
     private bool flatternTerrain = true;
 
     [Header("Perlin noise")]
-    [SerializeField]
-    private bool perlinNoise = false;
+    /*[SerializeField]
+    private bool perlinNoise = false;*/
 
     //To randomly select perlin noise scale between min and max
     [SerializeField] private float minPerlinNoiseWidthScale = 0.002f;
@@ -129,7 +129,7 @@ public class GenerateRandomHeights : MonoBehaviour
         {
             for (int height = 0; height < terrainData.heightmapResolution; height++)
             {
-                
+                /*
                 if (perlinNoise)
                 {
 
@@ -139,9 +139,9 @@ public class GenerateRandomHeights : MonoBehaviour
                 {
                     heightMap[width, height] = Random.Range(minRandomHeightRange, maxRandomHeightRange);
                 }
-                
+                */
 
-                heightMap[width, height] = Random.Range(minRandomHeightRange, maxRandomHeightRange);
+                //heightMap[width, height] = Random.Range(minRandomHeightRange, maxRandomHeightRange);
                 heightMap[width, height] += Mathf.PerlinNoise(width * perlinWidth, height * perlinHeight);
             }
         }
@@ -321,8 +321,9 @@ public class GenerateRandomHeights : MonoBehaviour
             {
                 randomXPos = Random.Range(0, (int)terrainData.size.x);
                 randomZPos = Random.Range(0, (int)terrainData.size.z);
+                Vector3 spawnPos = new Vector3(randomXPos, terrainData.size.y, randomZPos);
 
-                heightFound = terrainData.GetHeight(randomXPos, randomZPos) / terrainData.size.y;
+                heightFound = Terrain.activeTerrain.SampleHeight(spawnPos)/terrainData.size.y;
                 if (heightFound >= player.minHeight && heightFound <= player.maxHeight)
                 {
                     positionAvailable = true;
@@ -335,8 +336,9 @@ public class GenerateRandomHeights : MonoBehaviour
             //float playerZ = randomZPos / terrainData.size.z;
 
             Vector3 playerPosition = new Vector3(randomXPos,
-                                                heightFound * terrainData.size.y,
+                                                heightFound * terrainData.size.y+player.spawnOffset,
                                                 randomZPos) + this.transform.position;
+
             Debug.Log("Player spawn position: "+playerPosition);
             Debug.Log("Terrain height " + terrainData.size.y);
             //RaycastHit raycastHit;
