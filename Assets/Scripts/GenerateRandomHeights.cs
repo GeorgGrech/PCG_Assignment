@@ -19,13 +19,22 @@ public class TreeData
 }
 
 [System.Serializable]
-public class GrassData
+public class RockData
 {
-    public Texture grassTexture;
+    public GameObject rockMesh;
     public float minHeight;
     public float maxHeight;
 }
 
+/*
+[System.Serializable]
+public class GrassData
+{
+    public Texture grassTexture;
+    //public float minHeight;
+    //public float maxHeight;
+}
+*/
 
 [System.Serializable]
 public class Player
@@ -90,6 +99,23 @@ public class GenerateRandomHeights : MonoBehaviour
     [SerializeField]
     private int terrainLayerIndex;
 
+    [Header("Rock Data")]
+    [SerializeField]
+    private List<TreeData> rockData;
+
+    [SerializeField]
+    private int maxRocks = 1000;
+
+    [SerializeField]
+    private int rockSpacing = 20;
+
+    [SerializeField]
+    private bool addRocks = false;
+
+    /*[SerializeField]
+    private int terrainLayerIndex;*/
+
+    /*
     [Header("Grass Data")]
     [SerializeField]
     private List<GrassData> grassData;
@@ -99,9 +125,13 @@ public class GenerateRandomHeights : MonoBehaviour
 
     [SerializeField]
     private float grassSpacing = .5f;
+    [SerializeField]
+    public float minHeightGrass;
+    [SerializeField]
+    public float maxHeightGrass;
 
     [SerializeField]
-    private bool addGrass = false;
+    private bool addGrass = false;*/
 
     [Header("Water")]
     [SerializeField]
@@ -123,6 +153,14 @@ public class GenerateRandomHeights : MonoBehaviour
     [SerializeField]
     private Player player;
 
+    [Header("Path")]
+    [SerializeField]
+    private GameObject pathPrefab;
+    [SerializeField]
+    private int pathLength;
+    [SerializeField]
+    private float pathOffset;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -139,9 +177,11 @@ public class GenerateRandomHeights : MonoBehaviour
         GenerateHeights();
         AddTerrainTextures();
         AddTrees();
+        //AddGrass();
         AddWater();
         AddClouds();
         SpawnPlayer();
+        //AddPath();
     }
 
     private void GenerateHeights()
@@ -229,7 +269,7 @@ public class GenerateRandomHeights : MonoBehaviour
                     float heightBegin = terrainTextureData[i].minHeight - terrainTextureBlendOffset;
                     float heightEnd = terrainTextureData[i].maxHeight + terrainTextureBlendOffset;
 
-                    if (heightMap[width, height] >= heightBegin && heightMap[width,height] <= heightEnd)
+                    if (heightMap[width, height] >= heightBegin && heightMap[width, height] <= heightEnd)
                     {
                         alphamap[i] = 1;
                     }
@@ -243,7 +283,7 @@ public class GenerateRandomHeights : MonoBehaviour
                 }
             }
         }
-        terrainData.SetAlphamaps(0,0,alphamapList);
+        terrainData.SetAlphamaps(0, 0, alphamapList);
     }
 
     private void Blend(float[] alphamap)
@@ -262,7 +302,7 @@ public class GenerateRandomHeights : MonoBehaviour
     }
 
     private void AddTrees()
-    {        
+    {
         TreePrototype[] trees = new TreePrototype[treeData.Count];
 
         for (int i = 0; i < treeData.Count; i++)
@@ -328,6 +368,7 @@ public class GenerateRandomHeights : MonoBehaviour
         terrainData.treeInstances = treeInstanceList.ToArray();
     }
 
+    /*
     private void AddGrass()
     {
         DetailPrototype[] grass = new DetailPrototype[grassData.Count];
@@ -340,8 +381,26 @@ public class GenerateRandomHeights : MonoBehaviour
         }
 
         terrainData.detailPrototypes = grass;
-        //terr
-    }
+        terrainData.RefreshPrototypes();
+        
+        var map = terrainData.GetDetailLayer(0, 0, terrainData.detailWidth, terrainData.detailHeight, terrainLayerIndex);
+
+        for (int y = 0; y < terrainData.detailHeight; y++)
+        {
+            for (int x = 0; x < terrainData.detailWidth; x++)
+            {
+                // If the pixel value is below the threshold then
+                // set it to zero.
+                if (map[x, y] < minHeightGrass || map[x, y] > maxHeightGrass)
+                {
+                    map[x, y] = 0;
+                }
+            }
+        }
+
+        // Assign the modified map back.
+        terrainData.SetDetailLayer(0, 0, 0, map);
+    }*/
 
     private void AddWater()
     {
@@ -406,6 +465,40 @@ public class GenerateRandomHeights : MonoBehaviour
                 Vector3 spawnPos = new Vector3(randomXPos, cloudHeight * terrainData.size.y, randomZPos) + this.transform.position;
                 Instantiate(clouds, spawnPos, Quaternion.identity);
             }
+        }
+    }
+
+    public void AddPath()
+    {
+        float randomXPos = Random.Range(0, (int)terrainData.size.x);
+        float randomZPos = Random.Range(0, (int)terrainData.size.z);
+
+        float startHeight = Terrain.activeTerrain.SampleHeight(new Vector3(randomXPos, terrainData.size.y, randomZPos));
+        Vector3 startPos = new Vector3(randomXPos, startHeight, randomZPos);
+
+        //Vector3 spawnPos = startPos;
+
+        GameObject prevInstance = Instantiate(pathPrefab,startPos,Quaternion.identity);
+        //prevInstance.name = "PathOrigin";
+        GameObject nextInstance;
+        for (int x = 0; x < pathLength; x++)
+        {
+            nextInstance = Instantiate(pathPrefab,prevInstance.transform); //instantiate at same position
+            //nextInstance.transform.SetParent(prevInstance.transform); //reattach to parent for path deviation from rotation
+
+            //nextInstance.name = "Path";
+
+            nextInstance.transform.position += new Vector3(0, 0, pathOffset); //move forward
+
+            float randomRotation = Random.Range(-50, 50);
+            prevInstance.transform.Rotate(new Vector3(0, randomRotation, 0),Space.Self); //rotate
+
+            //nextInstance.transform.parent = null; //detach from parent to treat it independently
+            float fixedHeight = Terrain.activeTerrain.SampleHeight(new Vector3(nextInstance.transform.position.x, terrainData.size.y, nextInstance.transform.position.z));
+            nextInstance.transform.position = new Vector3(nextInstance.transform.position.x, fixedHeight, nextInstance.transform.position.z); //change y to proper height on terrain
+            //nextInstance.transform.SetParent(prevInstance.transform); //reattach to parent for path deviation from rotation
+
+            prevInstance = nextInstance; //start from new on next iteration
         }
     }
 
