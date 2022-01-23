@@ -18,6 +18,14 @@ public class TreeData
     public float maxHeight;
 }
 
+[System.Serializable]
+public class GrassData
+{
+    public Texture grassTexture;
+    public float minHeight;
+    public float maxHeight;
+}
+
 
 [System.Serializable]
 public class Player
@@ -81,6 +89,19 @@ public class GenerateRandomHeights : MonoBehaviour
 
     [SerializeField]
     private int terrainLayerIndex;
+
+    [Header("Grass Data")]
+    [SerializeField]
+    private List<GrassData> grassData;
+
+    [SerializeField]
+    private int grassAmount = 10000;
+
+    [SerializeField]
+    private float grassSpacing = .5f;
+
+    [SerializeField]
+    private bool addGrass = false;
 
     [Header("Water")]
     [SerializeField]
@@ -241,7 +262,7 @@ public class GenerateRandomHeights : MonoBehaviour
     }
 
     private void AddTrees()
-    {
+    {        
         TreePrototype[] trees = new TreePrototype[treeData.Count];
 
         for (int i = 0; i < treeData.Count; i++)
@@ -305,6 +326,21 @@ public class GenerateRandomHeights : MonoBehaviour
             }
         }
         terrainData.treeInstances = treeInstanceList.ToArray();
+    }
+
+    private void AddGrass()
+    {
+        DetailPrototype[] grass = new DetailPrototype[grassData.Count];
+
+        for (int i = 0; i < grassData.Count; i++)
+        {
+            grass[i] = new DetailPrototype();
+            grass[i].prototypeTexture = (Texture2D)grassData[i].grassTexture;
+            grass[i].renderMode = (DetailRenderMode)2; //Render as grass
+        }
+
+        terrainData.detailPrototypes = grass;
+        //terr
     }
 
     private void AddWater()

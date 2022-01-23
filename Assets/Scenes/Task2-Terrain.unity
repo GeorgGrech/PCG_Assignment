@@ -195,6 +195,10 @@ MonoBehaviour:
   treeSpacing: 20
   addTrees: 1
   terrainLayerIndex: 8
+  grassData: []
+  grassAmount: 10000
+  grassSpacing: 0.5
+  addGrass: 1
   water: {fileID: 100006, guid: b544816461f324e56a39767fdeb5b114, type: 3}
   waterHeight: 0.35
   clouds: {fileID: 3571540375477515011, guid: 37046447b31ab544982e7229e9116148, type: 3}
