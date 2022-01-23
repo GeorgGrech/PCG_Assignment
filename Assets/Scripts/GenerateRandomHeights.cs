@@ -18,13 +18,14 @@ public class TreeData
     public float maxHeight;
 }
 
+/*
 [System.Serializable]
 public class RockData
 {
     public GameObject rockMesh;
     public float minHeight;
     public float maxHeight;
-}
+}*/
 
 /*
 [System.Serializable]
@@ -36,6 +37,7 @@ public class GrassData
 }
 */
 
+/*
 [System.Serializable]
 public class Player
 {
@@ -43,7 +45,7 @@ public class Player
     public float minHeight;
     public float maxHeight;
     public float spawnOffset; //Vertical offset to avoid clipping terrain when spawning
-}
+}*/
 
 public class GenerateRandomHeights : MonoBehaviour
 {
@@ -148,10 +150,18 @@ public class GenerateRandomHeights : MonoBehaviour
     private int cloudAmount = 20;
     [SerializeField]
     private bool addClouds = false;
+    [SerializeField]
+    private bool addSnow = false;
 
     [Header("Player")]
     [SerializeField]
-    private Player player;
+    private GameObject playerPrefab;
+    [SerializeField]
+    public float minPlayerHeight;
+    [SerializeField]
+    public float maxPlayerHeight;
+    [SerializeField]
+    public float spawnOffset; //Vertical offset to avoid clipping terrain when spawning
 
     [Header("Path")]
     [SerializeField]
@@ -368,6 +378,7 @@ public class GenerateRandomHeights : MonoBehaviour
         terrainData.treeInstances = treeInstanceList.ToArray();
     }
 
+
     /*
     private void AddGrass()
     {
@@ -415,6 +426,8 @@ public class GenerateRandomHeights : MonoBehaviour
 
         bool playerSpawned = false;
 
+        Vector3 playerPosition = Vector3.zero; //placeholder values
+        //Quaternion playerRotation = Quaternion.identity;
         while (!playerSpawned)
         {
 
@@ -430,7 +443,7 @@ public class GenerateRandomHeights : MonoBehaviour
                 Vector3 spawnPos = new Vector3(randomXPos, terrainData.size.y, randomZPos);
 
                 heightFound = Terrain.activeTerrain.SampleHeight(spawnPos)/terrainData.size.y;
-                if (heightFound >= player.minHeight && heightFound <= player.maxHeight)
+                if (heightFound >= minPlayerHeight && heightFound <= maxPlayerHeight)
                 {
                     positionAvailable = true;
                     Debug.Log("Height selected: " + heightFound);
@@ -441,17 +454,22 @@ public class GenerateRandomHeights : MonoBehaviour
             //float playerX = randomXPos / terrainData.size.x;
             //float playerZ = randomZPos / terrainData.size.z;
 
-            Vector3 playerPosition = new Vector3(randomXPos,
-                                                heightFound * terrainData.size.y+player.spawnOffset,
+            playerPosition = new Vector3(randomXPos,
+                                                heightFound * terrainData.size.y+spawnOffset,
                                                 randomZPos) + this.transform.position;
 
             Debug.Log("Player spawn position: "+playerPosition);
             Debug.Log("Terrain height " + terrainData.size.y);
             //RaycastHit raycastHit;
 
-            Instantiate(player.playerPrefab, playerPosition, this.transform.rotation);
+            GameObject playerInstance = Instantiate(playerPrefab, playerPosition, this.transform.rotation);
+
+            playerInstance.transform.LookAt(new Vector3(terrainData.size.x/2, playerInstance.transform.position.y, terrainData.size.z/2)); //Look at centre of map, but leave player standing still
             playerSpawned = true;
         }
+
+        playerPosition.y -= spawnOffset; //remove offset for path spawning
+        AddPath(playerPosition);
     }
 
     public void AddClouds()
@@ -463,30 +481,40 @@ public class GenerateRandomHeights : MonoBehaviour
                 float randomXPos = Random.Range(0, (int)terrainData.size.x);
                 float randomZPos = Random.Range(0, (int)terrainData.size.z);
                 Vector3 spawnPos = new Vector3(randomXPos, cloudHeight * terrainData.size.y, randomZPos) + this.transform.position;
-                Instantiate(clouds, spawnPos, Quaternion.identity);
+                GameObject cloud = Instantiate(clouds, spawnPos, Quaternion.identity);
+
+                if (addSnow)
+                {
+                    float snowChance = Random.Range(0, 9);
+                    if (snowChance < 3) //1/3 chance for snow
+                    {
+                        cloud.transform.Find("Snow").gameObject.SetActive(true);
+                    }
+                }
             }
         }
     }
 
-    public void AddPath()
+    public void AddPath(Vector3 startPosition)
     {
+        /*
         float randomXPos = Random.Range(0, (int)terrainData.size.x);
         float randomZPos = Random.Range(0, (int)terrainData.size.z);
 
         float startHeight = Terrain.activeTerrain.SampleHeight(new Vector3(randomXPos, terrainData.size.y, randomZPos));
-        Vector3 startPos = new Vector3(randomXPos, startHeight, randomZPos);
+        Vector3 startPos = new Vector3(randomXPos, startHeight, randomZPos);*/
 
-        //Vector3 spawnPos = startPos;
+        //Vector3 startPos = startPosition;
 
-        GameObject prevInstance = Instantiate(pathPrefab,startPos,Quaternion.identity);
-        //prevInstance.name = "PathOrigin";
+        GameObject prevInstance = Instantiate(pathPrefab,startPosition,Quaternion.identity);
+        prevInstance.name = "PathOrigin";
         GameObject nextInstance;
         for (int x = 0; x < pathLength; x++)
         {
             nextInstance = Instantiate(pathPrefab,prevInstance.transform); //instantiate at same position
             //nextInstance.transform.SetParent(prevInstance.transform); //reattach to parent for path deviation from rotation
 
-            //nextInstance.name = "Path";
+            nextInstance.name = "Path";
 
             nextInstance.transform.position += new Vector3(0, 0, pathOffset); //move forward
 
