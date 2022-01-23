@@ -122,7 +122,7 @@ public class Track : MonoBehaviour
 
             CreateTrack(prevQuad, currQuad, nextQuad);
         }
-        int startPosition = 0;
+        //int startPosition = 0;
         //car.transform.position = pointRefList[startPosition];
         int spawnPosition = Random.Range(finishStartGap, pointRefList.Count); //Position further ahead of 0 to avoid negative checkpoint spawn value
         car.transform.position = pointRefList[spawnPosition];

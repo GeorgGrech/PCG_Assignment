@@ -28,9 +28,6 @@ public class GenerateRandomHeights : MonoBehaviour
     private bool flatternTerrain = true;
 
     [Header("Perlin noise")]
-    /*[SerializeField]
-    private bool perlinNoise = false;*/
-
     //To randomly select perlin noise scale between min and max
     [SerializeField] private float minPerlinNoiseWidthScale = 0.002f;
     [SerializeField] private float maxPerlinNoiseWidthScale = 0.02f;
@@ -99,6 +96,8 @@ public class GenerateRandomHeights : MonoBehaviour
     private int pathLength;
     [SerializeField]
     private float pathOffset;
+    [SerializeField]
+    private bool addPath = false;
 
     // Start is called before the first frame update
     void Start()
@@ -116,19 +115,13 @@ public class GenerateRandomHeights : MonoBehaviour
         GenerateHeights();
         AddTerrainTextures();
         AddTrees();
-        //AddGrass();
         AddWater();
         AddClouds();
         SpawnPlayer();
-        //AddPath();
     }
 
     private void GenerateHeights()
     {
-
-        // var perlinNoiseWidthScale = UnityEngine.Random.Range(0.00f, 0.02f);
-        // var perlinNoiseHeightScale = UnityEngine.Random.Range(0.00f, 0.02f);
-
         float perlinWidth = Random.Range(minPerlinNoiseWidthScale, maxPerlinNoiseWidthScale);
         float perlinHeight = Random.Range(minPerlinNoiseHeightScale, maxPerlinNoiseHeightScale);
 
@@ -308,8 +301,7 @@ public class GenerateRandomHeights : MonoBehaviour
 
         bool playerSpawned = false;
 
-        Vector3 playerPosition = Vector3.zero; //placeholder values
-        //Quaternion playerRotation = Quaternion.identity;
+        Vector3 playerPosition = Vector3.zero; //placeholder value
         while (!playerSpawned)
         {
 
@@ -342,16 +334,17 @@ public class GenerateRandomHeights : MonoBehaviour
 
             Debug.Log("Player spawn position: "+playerPosition);
             Debug.Log("Terrain height " + terrainData.size.y);
-            //RaycastHit raycastHit;
 
             GameObject playerInstance = Instantiate(playerPrefab, playerPosition, this.transform.rotation);
 
-            playerInstance.transform.LookAt(new Vector3(terrainData.size.x/2, playerInstance.transform.position.y, terrainData.size.z/2)); //Look at centre of map, but leave player standing still
+            //playerInstance.transform.LookAt(new Vector3(terrainData.size.x/2, playerInstance.transform.position.y, terrainData.size.z/2)); //Look at centre of map, but leave player standing still
             playerSpawned = true;
         }
 
         playerPosition.y -= spawnOffset; //remove offset for path spawning
-        AddPath(playerPosition);
+
+        if(addPath)
+            AddPath(playerPosition);
     }
 
     public void AddClouds()
@@ -401,12 +394,10 @@ public class GenerateRandomHeights : MonoBehaviour
             nextInstance.transform.position += new Vector3(0, 0, pathOffset); //move forward
 
             float randomRotation = Random.Range(-50, 50);
-            prevInstance.transform.Rotate(new Vector3(0, randomRotation, 0),Space.Self); //rotate
+            prevInstance.transform.Rotate(new Vector3(0, randomRotation, 0),Space.Self); //rotate parent
 
-            //nextInstance.transform.parent = null; //detach from parent to treat it independently
             float fixedHeight = Terrain.activeTerrain.SampleHeight(new Vector3(nextInstance.transform.position.x, terrainData.size.y, nextInstance.transform.position.z));
             nextInstance.transform.position = new Vector3(nextInstance.transform.position.x, fixedHeight, nextInstance.transform.position.z); //change y to proper height on terrain
-            //nextInstance.transform.SetParent(prevInstance.transform); //reattach to parent for path deviation from rotation
 
             prevInstance = nextInstance; //start from new on next iteration
         }

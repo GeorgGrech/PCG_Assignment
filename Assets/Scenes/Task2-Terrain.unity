@@ -154,8 +154,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74a4fd8852c7af84b9bf3cd7d74d5ceb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minRandomHeightRange: 0.1
-  maxRandomHeightRange: 0.1
   flatternTerrain: 1
   minPerlinNoiseWidthScale: 0.001
   maxPerlinNoiseWidthScale: 0.01
@@ -204,10 +202,6 @@ MonoBehaviour:
   treeSpacing: 20
   addTrees: 1
   terrainLayerIndex: 8
-  rockData: []
-  maxRocks: 1000
-  rockSpacing: 20
-  addRocks: 0
   water: {fileID: 100006, guid: b544816461f324e56a39767fdeb5b114, type: 3}
   waterHeight: 0.35
   clouds: {fileID: 3571540375477515011, guid: 37046447b31ab544982e7229e9116148, type: 3}
@@ -222,6 +216,7 @@ MonoBehaviour:
   pathPrefab: {fileID: 1162095705847896965, guid: d393f0b0441810f4e835a9edebffa186, type: 3}
   pathLength: 200
   pathOffset: 5
+  addPath: 1
 --- !u!154 &1527863257
 TerrainCollider:
   m_ObjectHideFlags: 0
