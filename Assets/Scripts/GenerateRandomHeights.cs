@@ -18,48 +18,11 @@ public class TreeData
     public float maxHeight;
 }
 
-/*
-[System.Serializable]
-public class RockData
-{
-    public GameObject rockMesh;
-    public float minHeight;
-    public float maxHeight;
-}*/
-
-/*
-[System.Serializable]
-public class GrassData
-{
-    public Texture grassTexture;
-    //public float minHeight;
-    //public float maxHeight;
-}
-*/
-
-/*
-[System.Serializable]
-public class Player
-{
-    public GameObject playerPrefab;
-    public float minHeight;
-    public float maxHeight;
-    public float spawnOffset; //Vertical offset to avoid clipping terrain when spawning
-}*/
-
 public class GenerateRandomHeights : MonoBehaviour
 {
     private Terrain terrain;
 
     private TerrainData terrainData;
-
-    [SerializeField]
-    [Range(0f, 1f)]
-    private float minRandomHeightRange = 0;//min is 0
-
-    [SerializeField]
-    [Range(0f, 1f)]
-    private float maxRandomHeightRange = 0.1f;//max is 1
 
     [SerializeField]
     private bool flatternTerrain = true;
@@ -100,40 +63,6 @@ public class GenerateRandomHeights : MonoBehaviour
 
     [SerializeField]
     private int terrainLayerIndex;
-
-    [Header("Rock Data")]
-    [SerializeField]
-    private List<TreeData> rockData;
-
-    [SerializeField]
-    private int maxRocks = 1000;
-
-    [SerializeField]
-    private int rockSpacing = 20;
-
-    [SerializeField]
-    private bool addRocks = false;
-
-    /*[SerializeField]
-    private int terrainLayerIndex;*/
-
-    /*
-    [Header("Grass Data")]
-    [SerializeField]
-    private List<GrassData> grassData;
-
-    [SerializeField]
-    private int grassAmount = 10000;
-
-    [SerializeField]
-    private float grassSpacing = .5f;
-    [SerializeField]
-    public float minHeightGrass;
-    [SerializeField]
-    public float maxHeightGrass;
-
-    [SerializeField]
-    private bool addGrass = false;*/
 
     [Header("Water")]
     [SerializeField]
@@ -209,19 +138,6 @@ public class GenerateRandomHeights : MonoBehaviour
         {
             for (int height = 0; height < terrainData.heightmapResolution; height++)
             {
-                /*
-                if (perlinNoise)
-                {
-
-                    heightMap[width, height] = Mathf.PerlinNoise(width * perlinWidth, height * perlinHeight);
-                }
-                else
-                {
-                    heightMap[width, height] = Random.Range(minRandomHeightRange, maxRandomHeightRange);
-                }
-                */
-
-                //heightMap[width, height] = Random.Range(minRandomHeightRange, maxRandomHeightRange);
                 heightMap[width, height] += Mathf.PerlinNoise(width * perlinWidth, height * perlinHeight);
             }
         }
@@ -378,40 +294,6 @@ public class GenerateRandomHeights : MonoBehaviour
         terrainData.treeInstances = treeInstanceList.ToArray();
     }
 
-
-    /*
-    private void AddGrass()
-    {
-        DetailPrototype[] grass = new DetailPrototype[grassData.Count];
-
-        for (int i = 0; i < grassData.Count; i++)
-        {
-            grass[i] = new DetailPrototype();
-            grass[i].prototypeTexture = (Texture2D)grassData[i].grassTexture;
-            grass[i].renderMode = (DetailRenderMode)2; //Render as grass
-        }
-
-        terrainData.detailPrototypes = grass;
-        terrainData.RefreshPrototypes();
-        
-        var map = terrainData.GetDetailLayer(0, 0, terrainData.detailWidth, terrainData.detailHeight, terrainLayerIndex);
-
-        for (int y = 0; y < terrainData.detailHeight; y++)
-        {
-            for (int x = 0; x < terrainData.detailWidth; x++)
-            {
-                // If the pixel value is below the threshold then
-                // set it to zero.
-                if (map[x, y] < minHeightGrass || map[x, y] > maxHeightGrass)
-                {
-                    map[x, y] = 0;
-                }
-            }
-        }
-
-        // Assign the modified map back.
-        terrainData.SetDetailLayer(0, 0, 0, map);
-    }*/
 
     private void AddWater()
     {
